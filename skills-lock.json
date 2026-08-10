@@ -1,0 +1,30 @@
+{
+    "version": 1,
+    "skills": {
+        "api-testing": {
+            "source": ".agents/skills/api-testing",
+            "sourceType": "local",
+            "computedHash": "a2078dacbb06225f1cc404596948d7fe8d114db598983841f4bdef853cc5e837"
+        },
+        "fixtures": {
+            "source": ".agents/skills/fixtures",
+            "sourceType": "local",
+            "computedHash": "e6a375b0e76f029e48501a5a67f864fac7491df629a861cbe661c561bbdeb739"
+        },
+        "page-objects": {
+            "source": ".agents/skills/page-objects",
+            "sourceType": "local",
+            "computedHash": "f7fa9ea460dbdcc12e7434e7c057b2db155238cc369c9f88c33ed4e857a86963"
+        },
+        "selectors": {
+            "source": ".agents/skills/selectors",
+            "sourceType": "local",
+            "computedHash": "7dd5957d812fed900d64c9440befa11238fe1d9f3caeb08060aa8929f9eea42b"
+        },
+        "test-data": {
+            "source": ".agents/skills/test-data",
+            "sourceType": "local",
+            "computedHash": "cc6948b86cdcc56daac3508cde2c7c7afcbce5c07236b93b9af071c54aa3287a"
+        }
+    }
+}
