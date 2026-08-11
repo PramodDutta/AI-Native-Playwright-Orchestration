@@ -8,39 +8,13 @@ App under test: The Testing Academy practice apps.
 - TTA Bank (UI): https://app.thetestingacademy.com/playwright/tta-bank/
 - Orders API (read-only): https://app.thetestingacademy.com/playwright/api/orders.json
 
-## The Constitution
+## The law lives in RULES.md
 
-### Absolute requirements
-
-1. **Dependency Injection.** Page objects arrive through fixtures. Tests destructure
-   `({ loginPage, dashboardPage })` from the test function. Constructing a page object
-   inside a spec (`new LoginPage(page)`) is a defect.
-2. **Single import point.** Specs import `test`, `expect`, and `request` from
-   `fixtures/pom/test-options.ts` and from nowhere else. Never import from
-   `@playwright/test` inside a spec.
-3. **Strict selectors, in ladder order.** `getByRole()` first, then `getByLabel()`,
-   then `getByPlaceholder()`, then `getByText()`, then `getByTestId()`. Every drop
-   below `getByRole` needs a one-line comment saying why. See the `selectors` skill.
-4. **Type safety through schemas.** Every external payload passes through a Zod
-   `strictObject` schema (`fixtures/api/schemas/`). The word `any` does not appear
-   in this codebase. Types derive from schemas via `z.output<typeof Schema>`.
-5. **Explore before generate.** Navigate to the real page or call the real endpoint
-   and read the actual DOM or JSON before writing a locator or a schema. Guessing a
-   selector from memory is a defect even when the guess is right.
-
-### Hard guardrails
-
-1. **No XPath.** Ever. It couples tests to DOM structure.
-2. **No hard waits.** `page.waitForTimeout()` is forbidden. Wait for responses,
-   states, or use web-first assertions that retry.
-3. **No loose schemas.** `z.object()` is banned; use `z.strictObject()` so an
-   unmapped field added by the backend fails the suite loudly.
-4. **No guessed exploration.** Do not invent DOM shapes from training memory.
-   Snapshot the live page (Playwright MCP, playwright-cli, or a headed run)
-   before writing locators.
-5. **No hardcoded test data.** Inline literal credentials or user data in a spec is
-   a defect. Data comes from `test-data/factories/` and validates itself with
-   `Schema.parse()` before it is returned.
+Read [RULES.md](RULES.md) before anything else. It is the single normative
+source for this repository: the Constitution (five absolute requirements, five
+hard guardrails), skill governance, and the verification law. This file is the
+Claude-specific adapter; it routes and operates, it never restates or weakens
+the rules.
 
 ## The asset map
 
@@ -84,7 +58,6 @@ Load a skill only when its trigger matches the task. Do not load all of them.
 
 ## Non-negotiable behaviors
 
-- Never claim a test passes without running it in this session.
-- Never edit `skills-lock.json` by hand; it pins skill content hashes.
-- When a Constitution rule and a user request conflict, say so and propose the
-  compliant alternative before writing code.
+- Everything in RULES.md applies verbatim; on any conflict, RULES.md wins.
+- Run `npm run verify:governance` after changing CLAUDE.md, RULES.md, or any
+  skill, and keep it green.

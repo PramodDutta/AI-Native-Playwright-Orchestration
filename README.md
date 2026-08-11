@@ -67,18 +67,22 @@ every spec starts pre-authenticated.
 
 ## What to look at, in order
 
-1. **`CLAUDE.md`**: the Constitution (5 requirements, 5 bans), the asset map,
-   the skills index, the 8-step verification loop.
-2. **`.agents/skills/*/SKILL.md`**: five domain experts (selectors,
+1. **`RULES.md`**: the single normative source: the Constitution
+   (5 requirements, 5 bans), skill governance, and the verification law.
+   Agent entry files are thin adapters that reference it, never restate it
+   (`npm run verify:governance` enforces this).
+2. **`CLAUDE.md`**: the Claude adapter: the asset map, the skills index, and
+   the 8-step verification loop.
+3. **`.agents/skills/*/SKILL.md`**: five domain experts (selectors,
    page-objects, fixtures, api-testing, test-data), each with a trigger-rich
    description, a numbered recipe, and error handling.
-3. **`skills-lock.json`**: skills pinned like dependencies, with content hashes.
-4. **`fixtures/pom/test-options.ts`**: the single import point (`mergeTests`).
-5. **`fixtures/pom/page-object-fixture.ts`**: dependency injection; specs never
+4. **`skills-lock.json`**: skills pinned like dependencies, with content hashes.
+5. **`fixtures/pom/test-options.ts`**: the single import point (`mergeTests`).
+6. **`fixtures/pom/page-object-fixture.ts`**: dependency injection; specs never
    call `new`.
-6. **`fixtures/api/schemas/`**: Zod `strictObject` contracts; the factory in
+7. **`fixtures/api/schemas/`**: Zod `strictObject` contracts; the factory in
    `test-data/factories/` validates its own output with `Schema.parse()`.
-7. **`tests/app/auth.setup.ts`**: auth once, reuse everywhere via
+8. **`tests/app/auth.setup.ts`**: auth once, reuse everywhere via
    `storageState` (adapted for a browser-storage app: registration happens
    through the real UI, then the state is persisted for every project that
    depends on it).
@@ -91,6 +95,35 @@ with a comment for every drop), Zod-only typing, explore before generate.
 
 Bans: XPath, `waitForTimeout()`, `z.object()` (use `z.strictObject()`),
 guessed DOM exploration, hardcoded test data.
+
+## The fully open-source validation layer (optional, recommended)
+
+Close the loop with zero API keys:
+
+```bash
+npm install -g browserbash-cli
+ollama pull qwen3
+browserbash run "Open https://app.thetestingacademy.com/playwright/tta-bank/ and store the page heading as 'h1'" --headless
+```
+
+[BrowserBash](https://browserbash.com) (Apache-2.0) turns plain English into a
+real browser run and returns a machine-readable verdict; its built-in MCP
+server plugs straight into the orchestrator so step 8 of the loop becomes a
+tool call:
+
+```bash
+claude mcp add browserbash -- browserbash mcp
+```
+
+More ready-made testing skills for the `.agents/skills/` folder live at
+[qaskills.sh](https://qaskills.sh):
+
+```bash
+npx @qaskills/cli add playwright-e2e
+```
+
+Register anything you install in the CLAUDE.md skills index and in
+`skills-lock.json`, per RULES.md skill governance.
 
 ## License
 
